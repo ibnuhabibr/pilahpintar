@@ -126,6 +126,23 @@ app.use("/api/education", educationRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/upload", uploadRoutes);
 
+// Root route handler
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "🌱 PilahPintar Backend API",
+    tagline: "Memilah Sampah dengan Cerdas, Demi Bumi yang Lestari",
+    version: "1.0.0",
+    endpoints: {
+      health: "/health",
+      api: "/api",
+      docs: "https://github.com/ibnuhabibr/pilahpintar"
+    },
+    status: "running",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // 404 handler
 app.use("*", (req, res) => {
   res.status(404).json({
@@ -249,7 +266,7 @@ process.on("SIGINT", async () => {
 });
 
 // Start the server untuk development
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   startServer();
 }
 
