@@ -26,11 +26,18 @@ router.post("/classify", (req, res) => {
   const uploadedFile = req.files.image;
 
   // Validate file type
-  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
   if (!allowedTypes.includes(uploadedFile.mimetype)) {
     return res.status(400).json({
       success: false,
-      message: "Jenis file tidak valid. Pilih gambar JPEG, PNG, GIF, atau WebP.",
+      message:
+        "Jenis file tidak valid. Pilih gambar JPEG, PNG, GIF, atau WebP.",
     });
   }
 

@@ -117,8 +117,9 @@ const ImageUpload = ({ onUploadSuccess, onError }) => {
       console.error("Upload error:", error);
       if (error.response) {
         // Server responded with error status
-        const message = error.response.data?.message ||
-                       `Server error: ${error.response.status}`;
+        const message =
+          error.response.data?.message ||
+          `Server error: ${error.response.status}`;
         onError(message);
       } else if (error.request) {
         // Network error
