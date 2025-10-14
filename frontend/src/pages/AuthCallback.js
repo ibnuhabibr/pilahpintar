@@ -10,19 +10,26 @@ const AuthCallback = () => {
   const { checkAuthStatus } = useAuth();
 
   useEffect(() => {
-    console.log("=== Auth Callback Started ===");
-    console.log("Current URL:", window.location.href);
-    console.log("Hash:", window.location.hash);
-    
-    // Set up auth state listener for OAuth callback
-    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state change event:", event);
-      console.log("Auth session:", session);
-      
-      if (event === 'SIGNED_IN' && session?.user) {
-        try {
-          console.log("Processing OAuth sign in...");
-          
+    const handleAuthCallback = async () => {
+      try {
+        console.log("=== Auth Callback Debug ===");
+        console.log("Current URL:", window.location.href);
+        console.log("Hash:", window.location.hash);
+
+        // Get session from Supabase - simpler approach for localhost
+        const { data: { session }, error } = await supabase.auth.getSession();
+
+        console.log("Supabase session:", session);
+        console.log("Supabase error:", error);
+
+        if (error) {
+          console.error("Supabase auth error:", error);
+          throw error;
+        }
+
+        if (session?.user) {
+          console.log("Auth callback - User data:", session.user);
+
           // Create or update user in backend
           const response = await axios.post("/auth/oauth", {
             email: session.user.email,
@@ -41,35 +48,26 @@ const AuthCallback = () => {
             await checkAuthStatus();
 
             toast.success("Login berhasil!", { id: "google-auth" });
-            
-            // Clean up and redirect
-            authListener.subscription.unsubscribe();
-            navigate("/dashboard", { replace: true });
+            navigate("/dashboard");
           } else {
             throw new Error("Failed to create user session");
           }
-        } catch (error) {
-          console.error("OAuth processing error:", error);
-          toast.error("Gagal menyelesaikan login dengan Google", {
-            id: "google-auth",
-          });
-          authListener.subscription.unsubscribe();
-          navigate("/login", { replace: true });
+        } else {
+          throw new Error("No user session found");
         }
-      } else if (event === 'SIGNED_OUT') {
-        console.log("User signed out during OAuth");
-        toast.error("Login dibatalkan", { id: "google-auth" });
-        authListener.subscription.unsubscribe();
-        navigate("/login", { replace: true });
-      }
-    });
-
-    // Cleanup function
-    return () => {
-      if (authListener?.subscription) {
-        authListener.subscription.unsubscribe();
+      } catch (error) {
+        console.error("Auth callback error:", error);
+        toast.error("Gagal menyelesaikan login dengan Google", {
+          id: "google-auth",
+        });
+        navigate("/login");
       }
     };
+
+    // Small delay to ensure URL is processed
+    const timeoutId = setTimeout(handleAuthCallback, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [navigate, checkAuthStatus]);
 
   return (

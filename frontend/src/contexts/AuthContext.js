@@ -200,7 +200,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Reset email sent successfully:", data);
       return {
         success: true,
-        message: "Email reset password telah dikirim. Silakan cek inbox Anda."
+        message: "Email reset password telah dikirim. Silakan cek inbox Anda.",
       };
     } catch (error) {
       console.error("Forgot password error details:", error);
@@ -217,7 +217,7 @@ export const AuthProvider = ({ children }) => {
       console.log("=== Reset Password Debug ===");
 
       const { data, error } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       });
 
       if (error) {
@@ -228,7 +228,8 @@ export const AuthProvider = ({ children }) => {
       console.log("Password reset successful:", data);
       return {
         success: true,
-        message: "Password berhasil diubah. Silakan login dengan password baru."
+        message:
+          "Password berhasil diubah. Silakan login dengan password baru.",
       };
     } catch (error) {
       console.error("Reset password error details:", error);
@@ -256,7 +257,7 @@ export const AuthProvider = ({ children }) => {
 
       // Update password
       const { data, error } = await supabase.auth.updateUser({
-        password: newPassword
+        password: newPassword,
       });
 
       if (error) {
@@ -267,7 +268,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Password changed successfully:", data);
       return {
         success: true,
-        message: "Password berhasil diubah."
+        message: "Password berhasil diubah.",
       };
     } catch (error) {
       console.error("Change password error details:", error);
