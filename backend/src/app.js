@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
+const fileUpload = require("express-fileupload");
 require("dotenv").config();
 
 const errorHandler = require("./middleware/errorHandler");
@@ -96,6 +97,17 @@ app.use(
 // Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// File upload middleware
+app.use(
+  fileUpload({
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    abortOnLimit: true,
+    responseOnLimit: "File size too large",
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 // Static file serving for uploaded images
 app.use("/uploads", express.static("uploads"));

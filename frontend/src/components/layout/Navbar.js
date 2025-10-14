@@ -90,7 +90,7 @@ const Navbar = () => {
                   className="flex items-center space-x-2 text-neutral-600 hover:text-primary-600 transition-colors duration-200"
                 >
                   <User className="h-5 w-5" />
-                  <span className="text-sm font-medium">{user.name}</span>
+                  <span className="text-sm font-medium">Dashboard</span>
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -160,7 +160,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                   >
                     <User className="h-5 w-5" />
-                    <span>{user.name}</span>
+                    <span>Dashboard</span>
                   </Link>
                   <button
                     onClick={handleLogout}

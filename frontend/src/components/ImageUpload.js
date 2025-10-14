@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { useRef, useState } from "react";
+import axios from "../config/axios";
 
 const ImageUpload = ({ onUploadSuccess, onError }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -100,26 +101,32 @@ const ImageUpload = ({ onUploadSuccess, onError }) => {
       const formData = new FormData();
       formData.append("image", selectedFile);
 
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/upload/classify", {
-        method: "POST",
+      const response = await axios.post("/upload/classify", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        body: formData,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        onUploadSuccess(result.data);
+      if (response.data.success) {
+        onUploadSuccess(response.data.data);
         clearSelection();
       } else {
-        onError(result.message || "Upload gagal");
+        onError(response.data.message || "Upload gagal");
       }
     } catch (error) {
       console.error("Upload error:", error);
-      onError("Kesalahan jaringan. Silakan coba lagi.");
+      if (error.response) {
+        // Server responded with error status
+        const message = error.response.data?.message ||
+                       `Server error: ${error.response.status}`;
+        onError(message);
+      } else if (error.request) {
+        // Network error
+        onError("Kesalahan jaringan. Periksa koneksi internet Anda.");
+      } else {
+        // Other error
+        onError("Terjadi kesalahan. Silakan coba lagi.");
+      }
     } finally {
       setUploading(false);
     }

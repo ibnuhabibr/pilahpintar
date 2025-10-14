@@ -10,10 +10,38 @@ router.get("/test", (req, res) => {
   });
 });
 
-// Mock upload route for testing frontend
+// Upload and classify route
 router.post("/classify", (req, res) => {
   console.log("Files received:", req.files);
   console.log("Body received:", req.body);
+
+  // Check if file was uploaded
+  if (!req.files || !req.files.image) {
+    return res.status(400).json({
+      success: false,
+      message: "Tidak ada file yang diunggah. Silakan pilih gambar.",
+    });
+  }
+
+  const uploadedFile = req.files.image;
+
+  // Validate file type
+  const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+  if (!allowedTypes.includes(uploadedFile.mimetype)) {
+    return res.status(400).json({
+      success: false,
+      message: "Jenis file tidak valid. Pilih gambar JPEG, PNG, GIF, atau WebP.",
+    });
+  }
+
+  // Validate file size (5MB limit)
+  const maxSize = 5 * 1024 * 1024; // 5MB
+  if (uploadedFile.size > maxSize) {
+    return res.status(400).json({
+      success: false,
+      message: "File terlalu besar. Pilih gambar yang lebih kecil dari 5MB.",
+    });
+  }
 
   // Mock response with random classification
   setTimeout(() => {
@@ -37,23 +65,14 @@ router.post("/classify", (req, res) => {
         "Buang ke tempat sampah logam. Bersihkan dari label dan cat, nilai jual tinggi di pengepul.",
     };
 
-    // Get file info from the uploaded file or use defaults
-    const uploadedFile = req.files && req.files.image ? req.files.image : null;
-    const fileInfo = uploadedFile
-      ? {
-          originalName: uploadedFile.name,
-          filename: uploadedFile.name,
-          size: uploadedFile.size,
-          url: "/uploads/" + uploadedFile.name,
-          name: uploadedFile.name,
-        }
-      : {
-          originalName: "gambar-sampah.jpg",
-          filename: "waste-" + Date.now() + ".jpg",
-          size: Math.floor(Math.random() * 500000) + 50000, // Random size 50KB-550KB
-          url: "/uploads/sample-image.jpg",
-          name: "gambar-sampah.jpg",
-        };
+    const fileInfo = {
+      originalName: uploadedFile.name,
+      filename: uploadedFile.name,
+      size: uploadedFile.size,
+      mimetype: uploadedFile.mimetype,
+      url: "/uploads/" + uploadedFile.name,
+      name: uploadedFile.name,
+    };
 
     res.json({
       success: true,
