@@ -3,22 +3,6 @@ export const handleDomainRedirect = () => {
   // Disabled because DNS-level redirect is already configured
   // This serves as backup if DNS redirect fails
   return false;
-
-  // Only run in production
-  if (process.env.NODE_ENV !== "production") return;
-
-  const currentDomain = window.location.hostname;
-  const preferredDomain = "www.pilahpintar.site";
-
-  // Redirect apex domain to www subdomain
-  if (currentDomain === "pilahpintar.site") {
-    const newUrl = `https://${preferredDomain}${window.location.pathname}${window.location.search}${window.location.hash}`;
-    console.log("Redirecting from apex domain to www:", newUrl);
-    window.location.replace(newUrl);
-    return true;
-  }
-
-  return false;
 };
 
 // Get the correct domain for API calls and redirects
