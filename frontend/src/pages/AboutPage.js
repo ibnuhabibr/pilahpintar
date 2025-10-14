@@ -18,18 +18,21 @@ const AboutPage = () => {
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
       avatar: "👨‍💻",
+      initials: "IH",
     },
     {
       name: "Firas Rasendriya Athaillah",
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
-      avatar: "👨‍�",
+      avatar: "👨‍💻",
+      initials: "FR",
     },
     {
       name: "Muhammad Rizqi Putra Nugroho",
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
-      avatar: "�‍�",
+      avatar: "👨‍💻",
+      initials: "MR",
     },
   ];
 
@@ -350,27 +353,37 @@ const AboutPage = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center"
-              >
-                <div className="bg-white p-6 rounded-xl shadow-lg border border-neutral-200 hover:shadow-xl transition-shadow duration-300">
-                  <div className="text-6xl mb-4">{member.avatar}</div>
-                  <h3 className="text-lg font-semibold text-neutral-800 mb-2">
-                    {member.name}
-                  </h3>
-                  <div className="text-neutral-600 mb-2">{member.role}</div>
-                  <p className="text-primary-600 text-sm font-bold">
-                    {member.institution}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="text-center"
+                >
+                  <div className="bg-white p-8 rounded-xl shadow-lg border border-neutral-200 hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    {/* Professional Avatar */}
+                    <div className="relative mb-6">
+                      <div className="w-24 h-24 mx-auto bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                        {member.initials}
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-lg">
+                        {member.avatar}
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-neutral-800 mb-3">
+                      {member.name}
+                    </h3>
+                    <div className="text-neutral-600 mb-3 font-medium">{member.role}</div>
+                    <p className="text-primary-600 text-sm font-bold bg-primary-50 py-2 px-3 rounded-lg">
+                      {member.institution}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

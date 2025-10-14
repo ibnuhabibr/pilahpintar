@@ -33,6 +33,33 @@ const CommunityPage = () => {
   const [postsLoading, setPostsLoading] = useState(true);
   const [submittingPost, setSubmittingPost] = useState(false);
 
+  // Generate avatar initials from name
+  const generateAvatar = (name) => {
+    if (!name) return "?";
+    const names = name.split(" ");
+    if (names.length >= 2) {
+      return names[0][0] + names[1][0];
+    }
+    return names[0][0] + (names[0][1] || "");
+  };
+
+  // Generate consistent avatar colors based on name
+  const getAvatarColor = (name) => {
+    if (!name) return "bg-gray-500";
+    const colors = [
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-indigo-500",
+      "bg-yellow-500",
+      "bg-red-500",
+      "bg-teal-500",
+    ];
+    const index = name.length % colors.length;
+    return colors[index];
+  };
+
   // Fetch posts from API
   const fetchPosts = async (category = "all", search = "") => {
     try {
@@ -128,6 +155,30 @@ const CommunityPage = () => {
     } catch (error) {
       console.error("Error adding reply:", error);
       toast.error(error.response?.data?.message || "Gagal menambahkan balasan");
+    }
+  };
+
+  // Like reply function
+  const handleLikeReply = async (postId, replyId) => {
+    try {
+      const response = await axios.post(
+        `/api/community/posts/${postId}/replies/${replyId}/like`
+      );
+
+      if (response.data.success) {
+        // Update posts
+        setPosts(
+          posts.map((post) => (post._id === postId ? response.data.post : post))
+        );
+
+        // Update selected post if viewing detail
+        if (selectedPost && selectedPost._id === postId) {
+          setSelectedPost(response.data.post);
+        }
+      }
+    } catch (error) {
+      console.error("Error liking reply:", error);
+      toast.error("Gagal menyukai balasan");
     }
   };
 
@@ -395,16 +446,9 @@ const CommunityPage = () => {
                 className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div className="flex items-start space-x-4">
-                  <img
-                    src={
-                      post.author?.avatar ||
-                      `https://ui-avatars.io/api/?name=${encodeURIComponent(
-                        post.author?.name || "User"
-                      )}&background=0D8ABC&color=fff`
-                    }
-                    alt={post.author?.name || "User"}
-                    className="w-12 h-12 rounded-full"
-                  />
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(post.author?.name || "User")}`}>
+                    {generateAvatar(post.author?.name || "User")}
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h3 className="text-lg font-semibold text-neutral-800 hover:text-primary-600 transition-colors">
@@ -578,11 +622,9 @@ const CommunityPage = () => {
               {/* Original Post */}
               <div className="border-b border-neutral-200 pb-6 mb-6">
                 <div className="flex items-start space-x-4">
-                  <img
-                    src={selectedPost.avatar}
-                    alt={selectedPost.author}
-                    className="w-12 h-12 rounded-full"
-                  />
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(selectedPost.author?.name || selectedPost.author || "User")}`}>
+                    {generateAvatar(selectedPost.author?.name || selectedPost.author || "User")}
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <h3 className="text-lg font-semibold text-neutral-800">
@@ -624,28 +666,42 @@ const CommunityPage = () => {
                 <h4 className="font-semibold text-neutral-800">
                   Balasan ({selectedPost.replies.length})
                 </h4>
-                {selectedPost.replies.map((reply) => (
+                {selectedPost.replies?.map((reply, index) => (
                   <div
-                    key={reply.id}
+                    key={reply._id || reply.id || index}
                     className="flex items-start space-x-4 p-4 bg-neutral-50 rounded-lg"
                   >
-                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                      <User className="h-5 w-5 text-primary-600" />
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${getAvatarColor(reply.author?.name || reply.author || "User")}`}>
+                      {generateAvatar(reply.author?.name || reply.author || "User")}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <span className="font-medium text-neutral-800">
-                          {reply.author}
+                          {reply.author?.name || reply.author || "User"}
                         </span>
                         <span className="text-xs text-neutral-500">
-                          {reply.createdAt}
+                          {new Date(reply.createdAt).toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </span>
                       </div>
                       <p className="text-neutral-600 mb-2">{reply.content}</p>
-                      <button className="flex items-center space-x-1 text-xs text-neutral-500 hover:text-primary-600 transition-colors">
-                        <ThumbsUp className="h-3 w-3" />
-                        <span>{reply.likes}</span>
-                      </button>
+                      <div className="flex items-center space-x-4">
+                        <button
+                          onClick={() => handleLikeReply(selectedPost._id, reply._id || reply.id)}
+                          className="flex items-center space-x-1 text-xs text-neutral-500 hover:text-primary-600 transition-colors"
+                        >
+                          <ThumbsUp className="h-3 w-3" />
+                          <span>{reply.likes?.length || 0}</span>
+                        </button>
+                        <button className="text-xs text-neutral-500 hover:text-primary-600 transition-colors">
+                          Balas
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
