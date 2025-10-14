@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { useEffect } from "react";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/layout/Footer";
