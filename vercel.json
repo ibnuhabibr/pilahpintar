@@ -1,25 +1,15 @@
 {
-  "version": 2,
-  "name": "pilahpintar",
-  "buildCommand": "cd frontend && npm install && npm run build",
+  "buildCommand": "cd frontend && npm ci && CI=false npm run build",
   "outputDirectory": "frontend/build",
-  "framework": null,
-  "installCommand": "cd frontend && npm install",
-  "routes": [
+  "installCommand": "cd frontend && npm ci",
+  "rewrites": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
-    "CI": "false"
+    "CI": "false",
+    "GENERATE_SOURCEMAP": "false"
   }
 }

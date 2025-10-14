@@ -46,8 +46,6 @@ const DashboardPage = () => {
     },
   };
 
-
-
   const recentActivities = [
     {
       type: "scan",
@@ -302,7 +300,6 @@ const DashboardPage = () => {
                     />
                   </div>
                 </div>
-
                 {/* Quick Actions
                 <div className="card">
                   <h3 className="text-lg font-semibold text-neutral-800 mb-4">
@@ -323,8 +320,7 @@ const DashboardPage = () => {
                     </button>
                   </div>
                 </div> */}
-n
-                {/* Weekly Activity Goal */}
+                n{/* Weekly Activity Goal */}
                 <div className="card">
                   <h3 className="text-lg font-semibold text-neutral-800 mb-4">
                     Target Mingguan
