@@ -248,7 +248,10 @@ process.on("SIGINT", async () => {
   }
 });
 
-// Start the server
-startServer();
+// Start the server untuk development
+if (process.env.NODE_ENV !== 'production') {
+  startServer();
+}
 
+// Export untuk Vercel serverless
 module.exports = app;

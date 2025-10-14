@@ -18,7 +18,9 @@ export const AuthProvider = ({ children }) => {
 
   // Check if backend is available
   const isProduction = process.env.NODE_ENV === "production";
-  const backendUrl = process.env.REACT_APP_API_URL;
+  const backendUrl = isProduction
+    ? process.env.REACT_APP_API_URL_PRODUCTION || process.env.REACT_APP_API_URL
+    : process.env.REACT_APP_API_URL;
   const hasBackend = !isProduction || backendUrl;
 
   useEffect(() => {
