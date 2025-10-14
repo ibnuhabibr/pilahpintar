@@ -57,7 +57,7 @@ const allowedOrigins = [
   "http://localhost:3001",
   "https://pilahpintar.vercel.app",
   process.env.FRONTEND_URL,
-  process.env.CORS_ORIGIN
+  process.env.CORS_ORIGIN,
 ].filter(Boolean);
 
 app.use(
@@ -66,13 +66,17 @@ app.use(
       // Allow requests with no origin (mobile apps, etc.)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.some(allowedOrigin =>
-        allowedOrigin === origin ||
-        (allowedOrigin.includes('vercel.app') && origin.includes('vercel.app'))
-      )) {
+      if (
+        allowedOrigins.some(
+          (allowedOrigin) =>
+            allowedOrigin === origin ||
+            (allowedOrigin.includes("vercel.app") &&
+              origin.includes("vercel.app"))
+        )
+      ) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error("Not allowed by CORS"));
       }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -88,8 +92,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Static file serving for uploaded images
 app.use("/uploads", express.static("uploads"));
 
-// Health check route
-app.get("/health", (req, res) => {
+// Health check routes
+const healthResponse = (req, res) => {
   const dbStatus =
     mongoose.connection.readyState === 1 ? "connected" : "disconnected";
   res.status(200).json({
@@ -99,7 +103,10 @@ app.get("/health", (req, res) => {
     environment: process.env.NODE_ENV || "development",
     database: dbStatus,
   });
-});
+};
+
+app.get("/health", healthResponse);
+app.get("/api/health", healthResponse);
 
 // Routes
 const authRoutes = require("./routes/auth");

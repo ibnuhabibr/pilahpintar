@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error("Error caught by boundary:", error, errorInfo);
   }
 
   render() {
@@ -24,7 +24,8 @@ class ErrorBoundary extends React.Component {
               Oops! Terjadi kesalahan
             </h1>
             <p className="text-neutral-600 mb-6">
-              Aplikasi sedang dalam pengembangan. Silakan refresh halaman atau coba lagi nanti.
+              Aplikasi sedang dalam pengembangan. Silakan refresh halaman atau
+              coba lagi nanti.
             </p>
             <button
               onClick={() => window.location.reload()}
