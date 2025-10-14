@@ -1,0 +1,7 @@
+// Test registration menggunakan fetch
+fetch('http://localhost:5000/api/auth/register', { method: 'POST', headers: {
+'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Test User',
+email: 'testuser' + Date.now() + '@example.com', password: 'password123' }) })
+.then(response => response.json()) .then(data => { console.log('✅ Registration
+result:', data); }) .catch(error => { console.log('❌ Registration error:',
+error); }); console.log('🧪 Testing registration...');

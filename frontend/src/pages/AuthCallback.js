@@ -17,7 +17,10 @@ const AuthCallback = () => {
         console.log("Hash:", window.location.hash);
 
         // Get session from Supabase - simpler approach for localhost
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
 
         console.log("Supabase session:", session);
         console.log("Supabase error:", error);

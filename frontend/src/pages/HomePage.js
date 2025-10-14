@@ -50,7 +50,7 @@ const HomePage = () => {
 
   const stats = [
     { number: "1,000+", label: "Pengguna Aktif" },
-    { number: "500+", label: "Sampah Terklasifikasi" },
+    { number: "5,000+", label: "Sampah Terklasifikasi" },
     { number: "25+", label: "Bank Sampah Mitra" },
     { number: "95%", label: "Akurasi AI" },
   ];

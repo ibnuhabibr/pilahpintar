@@ -198,19 +198,19 @@ const AboutPage = () => {
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">10K+</div>
+                    <div className="text-3xl font-bold mb-2">1K+</div>
                     <div className="text-sm text-primary-100">
                       Pengguna Aktif
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">50K+</div>
+                    <div className="text-3xl font-bold mb-2">5K+</div>
                     <div className="text-sm text-primary-100">
                       Sampah Terklasifikasi
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">500+</div>
+                    <div className="text-3xl font-bold mb-2">25+</div>
                     <div className="text-sm text-primary-100">
                       Mitra Bank Sampah
                     </div>

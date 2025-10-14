@@ -122,11 +122,11 @@ const userSchema = new mongoose.Schema(
     oauthProvider: {
       type: String,
       enum: ["google", "facebook"],
-      default: null,
+      required: false,
     },
     oauthId: {
       type: String,
-      default: null,
+      required: false,
     },
     isEmailVerified: {
       type: Boolean,
