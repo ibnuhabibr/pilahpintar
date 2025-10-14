@@ -8,7 +8,12 @@
     "dev": "nodemon src/app.js",
     "seed": "node seed-database.js",
     "test-db": "node test-mongo-connection.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo 'No build step required for Node.js'"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   },
   "keywords": [
     "waste-classification",
