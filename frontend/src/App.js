@@ -20,43 +20,43 @@ function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-neutral-50">
-          <Navbar />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/smart-sort" element={<UploadTestPage />} />
-              <Route path="/upload-test" element={<UploadTestPage />} />
-              <Route path="/sell-waste" element={<SellWastePage />} />
-              <Route path="/education" element={<EducationPage />} />
-              <Route
-                path="/community"
-                element={
-                  <ProtectedRoute>
-                    <CommunityPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <DashboardPage />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-          <Footer />
-          <Toaster position="top-right" />
-        </div>
-      </Router>
-    </AuthProvider>
+        <Router>
+          <div className="min-h-screen bg-neutral-50">
+            <Navbar />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/smart-sort" element={<UploadTestPage />} />
+                <Route path="/upload-test" element={<UploadTestPage />} />
+                <Route path="/sell-waste" element={<SellWastePage />} />
+                <Route path="/education" element={<EducationPage />} />
+                <Route
+                  path="/community"
+                  element={
+                    <ProtectedRoute>
+                      <CommunityPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/auth/callback" element={<AuthCallback />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
+            <Footer />
+            <Toaster position="top-right" />
+          </div>
+        </Router>
+      </AuthProvider>
     </ErrorBoundary>
   );
 }

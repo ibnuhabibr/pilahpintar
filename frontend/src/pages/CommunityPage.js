@@ -1,4 +1,3 @@
-import axios from "axios";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -13,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axios from "../config/axios";
 import { useAuth } from "../contexts/AuthContext";
 
 const CommunityPage = () => {
@@ -68,7 +68,7 @@ const CommunityPage = () => {
       if (category !== "all") params.append("category", category);
       if (search) params.append("search", search);
 
-      const response = await axios.get(`/api/community/posts?${params}`);
+      const response = await axios.get(`/community/posts?${params}`);
       if (response.data.success) {
         setPosts(response.data.posts);
       }
@@ -102,7 +102,7 @@ const CommunityPage = () => {
 
     try {
       setSubmittingPost(true);
-      const response = await axios.post("/api/community/posts", {
+      const response = await axios.post("/community/posts", {
         title: newPost.title.trim(),
         content: newPost.content.trim(),
         category: newPost.category,
@@ -131,12 +131,9 @@ const CommunityPage = () => {
     }
 
     try {
-      const response = await axios.post(
-        `/api/community/posts/${postId}/replies`,
-        {
-          content: newReply.trim(),
-        }
-      );
+      const response = await axios.post(`/community/posts/${postId}/replies`, {
+        content: newReply.trim(),
+      });
 
       if (response.data.success) {
         toast.success("Balasan berhasil ditambahkan!");
@@ -162,7 +159,7 @@ const CommunityPage = () => {
   const handleLikeReply = async (postId, replyId) => {
     try {
       const response = await axios.post(
-        `/api/community/posts/${postId}/replies/${replyId}/like`
+        `/community/posts/${postId}/replies/${replyId}/like`
       );
 
       if (response.data.success) {
@@ -185,7 +182,7 @@ const CommunityPage = () => {
   // Like/unlike post
   const handleLikePost = async (postId) => {
     try {
-      const response = await axios.post(`/api/community/posts/${postId}/like`);
+      const response = await axios.post(`/community/posts/${postId}/like`);
 
       if (response.data.success) {
         // Update posts array

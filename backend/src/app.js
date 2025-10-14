@@ -56,6 +56,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://pilahpintar.vercel.app",
+  "https://pilahpintar-beige.vercel.app",
   "https://pilahpintar-frontend.vercel.app",
   process.env.FRONTEND_URL,
   process.env.CORS_ORIGIN,
@@ -68,7 +69,7 @@ app.use(
       if (!origin) return callback(null, true);
 
       // In development, allow all origins
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === "development") {
         return callback(null, true);
       }
 

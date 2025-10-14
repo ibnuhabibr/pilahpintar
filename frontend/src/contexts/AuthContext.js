@@ -1,5 +1,5 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import axios from "../config/axios";
 import { supabase } from "../config/supabase";
 
 const AuthContext = createContext();
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     isProduction,
     backendUrl,
     hasBackend,
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
   });
 
   useEffect(() => {
@@ -44,14 +44,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const response = await axios.get("/api/auth/me");
+        // axios headers will be set by interceptor
+        const response = await axios.get("/auth/me");
         setUser(response.data.user);
       }
     } catch (error) {
       console.warn("Auth check failed (backend not available):", error.message);
       localStorage.removeItem("token");
-      delete axios.defaults.headers.common["Authorization"];
     } finally {
       setLoading(false);
     }
@@ -59,15 +58,30 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("/api/auth/login", { email, password });
+      console.log("=== Login Debug ===");
+      console.log("Email:", email);
+      console.log("Backend URL:", backendUrl);
+      console.log("API Call: POST /auth/login");
+
+      const response = await axios.post("/auth/login", { email, password });
+      console.log("Login response:", response.data);
+
       const { token, user } = response.data;
 
       localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(user);
+
+      console.log("Login successful for user:", user.email);
 
       return { success: true };
     } catch (error) {
+      console.error("Login error details:", {
+        status: error.response?.status,
+        message: error.response?.data?.message,
+        data: error.response?.data,
+        url: error.config?.url
+      });
+
       return {
         success: false,
         error: error.response?.data?.message || "Login failed",
@@ -77,15 +91,30 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post("/api/auth/register", userData);
+      console.log("=== Register Debug ===");
+      console.log("User data:", userData);
+      console.log("Backend URL:", backendUrl);
+      console.log("API Call: POST /auth/register");
+
+      const response = await axios.post("/auth/register", userData);
+      console.log("Register response:", response.data);
+
       const { token, user } = response.data;
 
       localStorage.setItem("token", token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(user);
+
+      console.log("Registration successful for user:", user.email);
 
       return { success: true };
     } catch (error) {
+      console.error("Register error details:", {
+        status: error.response?.status,
+        message: error.response?.data?.message,
+        data: error.response?.data,
+        url: error.config?.url
+      });
+
       return {
         success: false,
         error: error.response?.data?.message || "Registration failed",
@@ -95,11 +124,32 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async () => {
     try {
-      // OAuth akan redirect otomatis, jadi kita return success untuk UI feedback
+      // Determine correct redirect URL based on environment
+      const getRedirectURL = () => {
+        if (isProduction) {
+          // In production, use the actual deployed frontend URL
+          return process.env.REACT_APP_FRONTEND_URL
+            ? `${process.env.REACT_APP_FRONTEND_URL}/auth/callback`
+            : `${window.location.origin}/auth/callback`;
+        } else {
+          // In development, use localhost
+          return `${window.location.origin}/auth/callback`;
+        }
+      };
+
+      const redirectURL = getRedirectURL();
+
+      console.log("=== OAuth Debug Info ===");
+      console.log("Environment:", process.env.NODE_ENV);
+      console.log("Is Production:", isProduction);
+      console.log("Current Origin:", window.location.origin);
+      console.log("Frontend URL:", process.env.REACT_APP_FRONTEND_URL);
+      console.log("OAuth redirect URL:", redirectURL);
+      console.log("========================="); // OAuth akan redirect otomatis, jadi kita return success untuk UI feedback
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectURL,
           queryParams: {
             access_type: "offline",
             prompt: "consent",
@@ -121,7 +171,6 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
-    delete axios.defaults.headers.common["Authorization"];
     setUser(null);
     supabase.auth.signOut();
   };
