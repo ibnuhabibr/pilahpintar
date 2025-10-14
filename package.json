@@ -1,0 +1,40 @@
+{
+  "name": "pilahpintar",
+  "version": "1.0.0",
+  "description": "Platform klasifikasi sampah cerdas menggunakan AI/CNN",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "build": "cd frontend && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "waste-classification",
+    "ai",
+    "cnn",
+    "environmental",
+    "sustainability",
+    "react",
+    "nodejs"
+  ],
+  "author": "PilahPintar Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "puppeteer": "^24.24.1"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "mongodb": "^6.20.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-scripts": "^5.0.1"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "type": "commonjs"
+}
