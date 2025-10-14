@@ -23,5 +23,11 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "REACT_APP_API_URL_PRODUCTION": "https://pilahpintar-backend.vercel.app/api",
+    "REACT_APP_NAME": "PilahPintar",
+    "REACT_APP_VERSION": "1.0.0",
+    "GENERATE_SOURCEMAP": "false"
+  }
 }

@@ -56,6 +56,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://pilahpintar.vercel.app",
+  "https://pilahpintar-frontend.vercel.app",
   process.env.FRONTEND_URL,
   process.env.CORS_ORIGIN,
 ].filter(Boolean);
@@ -65,6 +66,11 @@ app.use(
     origin: function (origin, callback) {
       // Allow requests with no origin (mobile apps, etc.)
       if (!origin) return callback(null, true);
+
+      // In development, allow all origins
+      if (process.env.NODE_ENV === 'development') {
+        return callback(null, true);
+      }
 
       if (
         allowedOrigins.some(
@@ -76,11 +82,12 @@ app.use(
       ) {
         callback(null, true);
       } else {
+        console.log("CORS blocked origin:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     credentials: true,
   })
 );
@@ -136,10 +143,10 @@ app.get("/", (req, res) => {
     endpoints: {
       health: "/health",
       api: "/api",
-      docs: "https://github.com/ibnuhabibr/pilahpintar"
+      docs: "https://github.com/ibnuhabibr/pilahpintar",
     },
     status: "running",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

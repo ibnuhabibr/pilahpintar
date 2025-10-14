@@ -1,6 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -17,7 +18,8 @@ import UploadTestPage from "./pages/UploadTestPage";
 
 function App() {
   return (
-    <AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
       <Router>
         <div className="min-h-screen bg-neutral-50">
           <Navbar />
@@ -55,6 +57,7 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -1,6 +1,7 @@
 # 🚀 PilahPintar Vercel Deployment Guide
 
 ## 📋 Overview
+
 Deploy both **Frontend** dan **Backend** ke **Vercel** (serverless).
 
 ---
@@ -8,6 +9,7 @@ Deploy both **Frontend** dan **Backend** ke **Vercel** (serverless).
 ## 🎯 **STEP 1: Deploy Backend ke Vercel**
 
 ### 1.1 Setup Repository
+
 ```bash
 cd backend
 git add .
@@ -16,6 +18,7 @@ git push origin main
 ```
 
 ### 1.2 Deploy ke Vercel
+
 1. Login ke [vercel.com](https://vercel.com)
 2. Click **"New Project"**
 3. Import repository: `pilahpintar`
@@ -26,6 +29,7 @@ git push origin main
 8. **Install Command**: `npm install`
 
 ### 1.3 Environment Variables (Backend)
+
 Tambahkan di Vercel dashboard → Settings → Environment Variables:
 
 ```env
@@ -43,6 +47,7 @@ RATE_LIMIT_MAX_REQUESTS=100
 ```
 
 ### 1.4 Deploy Backend
+
 Click **"Deploy"** → Tunggu proses selesai
 
 Dapatkan URL backend: `https://[project-name]-backend.vercel.app`
@@ -52,12 +57,15 @@ Dapatkan URL backend: `https://[project-name]-backend.vercel.app`
 ## 🌐 **STEP 2: Deploy Frontend ke Vercel**
 
 ### 2.1 Update Frontend Environment
+
 Edit `frontend/.env`:
+
 ```env
 REACT_APP_API_URL_PRODUCTION=https://[your-backend-url].vercel.app/api
 ```
 
 ### 2.2 Deploy Frontend
+
 1. **New Project** → Import same repository
 2. Set **Root Directory**: `frontend`
 3. **Framework Preset**: Create React App
@@ -66,6 +74,7 @@ REACT_APP_API_URL_PRODUCTION=https://[your-backend-url].vercel.app/api
 6. **Install Command**: `npm install`
 
 ### 2.3 Environment Variables (Frontend)
+
 Tambahkan di Vercel dashboard:
 
 ```env
@@ -76,6 +85,7 @@ GENERATE_SOURCEMAP=false
 ```
 
 ### 2.4 Deploy Frontend
+
 Click **"Deploy"** → Tunggu proses selesai
 
 ---
@@ -83,12 +93,14 @@ Click **"Deploy"** → Tunggu proses selesai
 ## ✅ **STEP 3: Verification**
 
 ### 3.1 Test Backend Endpoints
+
 ```bash
 curl https://[your-backend-url].vercel.app/health
 curl https://[your-backend-url].vercel.app/api/auth/profile
 ```
 
 ### 3.2 Test Frontend
+
 - Buka: `https://[your-frontend-url].vercel.app`
 - Test login/register
 - Test API integration
@@ -98,10 +110,12 @@ curl https://[your-backend-url].vercel.app/api/auth/profile
 ## 🔧 **Domain Setup (Optional)**
 
 ### Backend Custom Domain
+
 1. Vercel Dashboard → Backend Project → Settings → Domains
 2. Add: `api.pilahpintar.com`
 
-### Frontend Custom Domain  
+### Frontend Custom Domain
+
 1. Vercel Dashboard → Frontend Project → Settings → Domains
 2. Add: `pilahpintar.com` atau `www.pilahpintar.com`
 
@@ -110,11 +124,13 @@ curl https://[your-backend-url].vercel.app/api/auth/profile
 ## 📊 **Monitoring & Logs**
 
 ### Vercel Analytics
+
 - Function logs: Dashboard → Functions tab
 - Performance: Dashboard → Analytics
 - Error tracking: Dashboard → Functions → View Logs
 
 ### Database Monitoring
+
 - MongoDB Atlas Dashboard
 - Connection logs
 - Performance metrics
@@ -124,15 +140,18 @@ curl https://[your-backend-url].vercel.app/api/auth/profile
 ## 🚨 **Important Notes**
 
 1. **Serverless Limitations**:
+
    - Max execution time: 30 seconds
    - Memory limit: 1024MB
    - No persistent file storage
 
 2. **File Uploads**:
+
    - Use temporary storage only
    - Consider Cloudinary/AWS S3 for persistent files
 
 3. **Environment Variables**:
+
    - Production values only
    - No sensitive data in frontend
 
@@ -151,6 +170,7 @@ Setiap push ke `main` branch akan auto-deploy ke Vercel.
 ## 📞 **Support**
 
 Jika ada error:
+
 1. Check Vercel Function logs
 2. Verify environment variables
 3. Test API endpoints individually
