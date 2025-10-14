@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         status: error.response?.status,
         message: error.response?.data?.message,
         data: error.response?.data,
-        url: error.config?.url
+        url: error.config?.url,
       });
 
       return {
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
         status: error.response?.status,
         message: error.response?.data?.message,
         data: error.response?.data,
-        url: error.config?.url
+        url: error.config?.url,
       });
 
       return {
@@ -175,12 +175,118 @@ export const AuthProvider = ({ children }) => {
     supabase.auth.signOut();
   };
 
+  // Forgot Password - Send reset email via Supabase
+  const forgotPassword = async (email) => {
+    try {
+      console.log("=== Forgot Password Debug ===");
+      console.log("Email:", email);
+      console.log("Frontend URL:", process.env.REACT_APP_FRONTEND_URL);
+
+      const resetURL = process.env.REACT_APP_FRONTEND_URL
+        ? `${process.env.REACT_APP_FRONTEND_URL}/reset-password`
+        : `${window.location.origin}/reset-password`;
+
+      console.log("Reset URL:", resetURL);
+
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: resetURL,
+      });
+
+      if (error) {
+        console.error("Forgot password error:", error);
+        throw error;
+      }
+
+      console.log("Reset email sent successfully:", data);
+      return {
+        success: true,
+        message: "Email reset password telah dikirim. Silakan cek inbox Anda."
+      };
+    } catch (error) {
+      console.error("Forgot password error details:", error);
+      return {
+        success: false,
+        error: error.message || "Gagal mengirim email reset password",
+      };
+    }
+  };
+
+  // Reset Password - Update password with new one
+  const resetPassword = async (newPassword) => {
+    try {
+      console.log("=== Reset Password Debug ===");
+
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        console.error("Reset password error:", error);
+        throw error;
+      }
+
+      console.log("Password reset successful:", data);
+      return {
+        success: true,
+        message: "Password berhasil diubah. Silakan login dengan password baru."
+      };
+    } catch (error) {
+      console.error("Reset password error details:", error);
+      return {
+        success: false,
+        error: error.message || "Gagal mengubah password",
+      };
+    }
+  };
+
+  // Change Password - For logged in users
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      console.log("=== Change Password Debug ===");
+
+      // Verify current password by attempting to sign in
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
+
+      if (verifyError) {
+        throw new Error("Password saat ini tidak benar");
+      }
+
+      // Update password
+      const { data, error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        console.error("Change password error:", error);
+        throw error;
+      }
+
+      console.log("Password changed successfully:", data);
+      return {
+        success: true,
+        message: "Password berhasil diubah."
+      };
+    } catch (error) {
+      console.error("Change password error details:", error);
+      return {
+        success: false,
+        error: error.message || "Gagal mengubah password",
+      };
+    }
+  };
+
   const value = {
     user,
     login,
     register,
     loginWithGoogle,
     logout,
+    forgotPassword,
+    resetPassword,
+    changePassword,
     loading,
     checkAuthStatus,
   };

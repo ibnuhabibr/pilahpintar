@@ -244,7 +244,15 @@ const LoginPage = () => {
             </div>
           </div>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 space-y-3 text-center">
+            <p className="text-neutral-600">
+              <Link
+                to="/forgot-password"
+                className="text-primary-600 hover:text-primary-500 font-medium text-sm"
+              >
+                Lupa password?
+              </Link>
+            </p>
             <p className="text-neutral-600">
               Belum punya akun?{" "}
               <Link
