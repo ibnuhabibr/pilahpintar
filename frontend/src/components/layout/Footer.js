@@ -33,19 +33,25 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://instagram.com/pilahpintar"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
-                href="#"
+                href="https://facebook.com/pilahpintar"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
               >
                 <Facebook className="h-5 w-5" />
               </a>
               <a
-                href="#"
+                href="https://twitter.com/pilahpintar"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-neutral-400 hover:text-primary-400 transition-colors duration-200"
               >
                 <Twitter className="h-5 w-5" />
@@ -132,13 +138,13 @@ const Footer = () => {
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a
-                href="#"
+                href="/privacy-policy"
                 className="text-neutral-400 hover:text-primary-400 text-sm transition-colors duration-200"
               >
                 Kebijakan Privasi
               </a>
               <a
-                href="#"
+                href="/terms-of-service"
                 className="text-neutral-400 hover:text-primary-400 text-sm transition-colors duration-200"
               >
                 Syarat & Ketentuan

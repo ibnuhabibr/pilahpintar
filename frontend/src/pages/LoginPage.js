@@ -181,7 +181,7 @@ const LoginPage = () => {
 
               <div className="text-sm">
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="text-primary-600 hover:text-primary-500 font-medium"
                 >
                   Lupa password?

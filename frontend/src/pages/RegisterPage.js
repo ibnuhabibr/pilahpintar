@@ -379,14 +379,14 @@ const RegisterPage = () => {
                     >
                       Saya setuju dengan{" "}
                       <a
-                        href="#"
+                        href="/terms-of-service"
                         className="text-primary-600 hover:text-primary-500 font-medium"
                       >
                         Syarat & Ketentuan
                       </a>{" "}
                       dan{" "}
                       <a
-                        href="#"
+                        href="/privacy-policy"
                         className="text-primary-600 hover:text-primary-500 font-medium"
                       >
                         Kebijakan Privasi
