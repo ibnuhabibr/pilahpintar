@@ -63,6 +63,8 @@ const allowedOrigins = [
   "https://pilahpintar-frontend.vercel.app",
   process.env.FRONTEND_URL,
   process.env.CORS_ORIGIN,
+  process.env.REACT_APP_DOMAIN_PRIMARY,
+  process.env.REACT_APP_DOMAIN_APEX,
 ].filter(Boolean);
 
 app.use(

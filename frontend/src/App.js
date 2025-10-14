@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { useEffect } from "react";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Footer from "./components/layout/Footer";
@@ -17,8 +18,14 @@ import RegisterPage from "./pages/RegisterPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import SellWastePage from "./pages/SellWastePage";
 import UploadTestPage from "./pages/UploadTestPage";
+import { handleDomainRedirect } from "./utils/domainUtils";
 
 function App() {
+  // Handle domain redirect on app load
+  useEffect(() => {
+    handleDomainRedirect();
+  }, []);
+
   return (
     <ErrorBoundary>
       <AuthProvider>
