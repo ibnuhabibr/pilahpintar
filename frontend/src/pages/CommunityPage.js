@@ -308,27 +308,6 @@ const CommunityPage = () => {
     handleSubmitReply(postId);
   };
 
-  const handleOldReply = (postId) => {
-    if (!newReply.trim()) return;
-
-    const reply = {
-      id: Date.now(),
-      content: newReply,
-      author: user.name,
-      createdAt: "Baru saja",
-      likes: 0,
-    };
-
-    setPosts(
-      posts.map((post) =>
-        post._id === postId
-          ? { ...post, replies: [...post.replies, reply] }
-          : post
-      )
-    );
-    setNewReply("");
-  };
-
   const openPostDetail = (post) => {
     setSelectedPost(post);
     setShowPostDetail(true);
@@ -446,7 +425,11 @@ const CommunityPage = () => {
                 className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer"
               >
                 <div className="flex items-start space-x-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(post.author?.name || "User")}`}>
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(
+                      post.author?.name || "User"
+                    )}`}
+                  >
                     {generateAvatar(post.author?.name || "User")}
                   </div>
                   <div className="flex-1">
@@ -622,8 +605,14 @@ const CommunityPage = () => {
               {/* Original Post */}
               <div className="border-b border-neutral-200 pb-6 mb-6">
                 <div className="flex items-start space-x-4">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(selectedPost.author?.name || selectedPost.author || "User")}`}>
-                    {generateAvatar(selectedPost.author?.name || selectedPost.author || "User")}
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${getAvatarColor(
+                      selectedPost.author?.name || selectedPost.author || "User"
+                    )}`}
+                  >
+                    {generateAvatar(
+                      selectedPost.author?.name || selectedPost.author || "User"
+                    )}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
@@ -671,8 +660,14 @@ const CommunityPage = () => {
                     key={reply._id || reply.id || index}
                     className="flex items-start space-x-4 p-4 bg-neutral-50 rounded-lg"
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${getAvatarColor(reply.author?.name || reply.author || "User")}`}>
-                      {generateAvatar(reply.author?.name || reply.author || "User")}
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${getAvatarColor(
+                        reply.author?.name || reply.author || "User"
+                      )}`}
+                    >
+                      {generateAvatar(
+                        reply.author?.name || reply.author || "User"
+                      )}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
@@ -680,19 +675,27 @@ const CommunityPage = () => {
                           {reply.author?.name || reply.author || "User"}
                         </span>
                         <span className="text-xs text-neutral-500">
-                          {new Date(reply.createdAt).toLocaleDateString('id-ID', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
+                          {new Date(reply.createdAt).toLocaleDateString(
+                            "id-ID",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
                         </span>
                       </div>
                       <p className="text-neutral-600 mb-2">{reply.content}</p>
                       <div className="flex items-center space-x-4">
                         <button
-                          onClick={() => handleLikeReply(selectedPost._id, reply._id || reply.id)}
+                          onClick={() =>
+                            handleLikeReply(
+                              selectedPost._id,
+                              reply._id || reply.id
+                            )
+                          }
                           className="flex items-center space-x-1 text-xs text-neutral-500 hover:text-primary-600 transition-colors"
                         >
                           <ThumbsUp className="h-3 w-3" />

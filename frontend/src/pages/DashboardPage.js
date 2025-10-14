@@ -46,26 +46,7 @@ const DashboardPage = () => {
     },
   };
 
-  const favorites = [
-    {
-      name: "TPS Hijau Lestari",
-      type: "TPS",
-      distance: "0.5 km",
-      lastVisit: "2025-01-15",
-    },
-    {
-      name: "Bank Sampah Bersama",
-      type: "Bank Sampah",
-      distance: "1.2 km",
-      lastVisit: "2025-02-20",
-    },
-    {
-      name: "Pusat Daur Ulang",
-      type: "Recycling Center",
-      distance: "2.1 km",
-      lastVisit: "2025-03-10",
-    },
-  ];
+
 
   const recentActivities = [
     {

@@ -17,21 +17,18 @@ const AboutPage = () => {
       name: "Ibnu Habib Ridwansyah",
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
-      avatar: "👨‍💻",
       initials: "IH",
     },
     {
       name: "Firas Rasendriya Athaillah",
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
-      avatar: "👨‍💻",
       initials: "FR",
     },
     {
       name: "Muhammad Rizqi Putra Nugroho",
       role: "Mahasiswa Teknik Informatika",
       institution: "Politeknik Elektronika Negeri Surabaya",
-      avatar: "👨‍💻",
       initials: "MR",
     },
   ];
@@ -376,7 +373,9 @@ const AboutPage = () => {
                     <h3 className="text-xl font-bold text-neutral-800 mb-3">
                       {member.name}
                     </h3>
-                    <div className="text-neutral-600 mb-3 font-medium">{member.role}</div>
+                    <div className="text-neutral-600 mb-3 font-medium">
+                      {member.role}
+                    </div>
                     <p className="text-primary-600 text-sm font-bold bg-primary-50 py-2 px-3 rounded-lg">
                       {member.institution}
                     </p>
