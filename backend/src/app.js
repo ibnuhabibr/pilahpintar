@@ -56,6 +56,8 @@ app.use(limiter);
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://pilahpintar.site",
+  "https://www.pilahpintar.site",
   "https://pilahpintar.vercel.app",
   "https://pilahpintar-beige.vercel.app",
   "https://pilahpintar-frontend.vercel.app",
