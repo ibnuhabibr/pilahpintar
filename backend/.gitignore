@@ -1,1 +1,25 @@
 .vercel
+
+# Environment variables - NEVER commit these!
+.env
+.env.local
+.env.production
+.env.render
+.env.render.import
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Test files
+test-mongo-vercel.js
+test-mongo-vercel-fixed.js
+
+# OS
+.DS_Store
+Thumbs.db
