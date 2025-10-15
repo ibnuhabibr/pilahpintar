@@ -15,7 +15,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ResetPassword from "./pages/ResetPassword";
 import SellWastePage from "./pages/SellWastePage";
 import UploadTestPage from "./pages/UploadTestPage";
 import { handleDomainRedirect } from "./utils/domainUtils";
@@ -54,7 +54,7 @@ function App() {
                   path="/forgot-password"
                   element={<ForgotPasswordPage />}
                 />
-                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route
                   path="/dashboard"
