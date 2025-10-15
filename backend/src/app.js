@@ -206,7 +206,7 @@ const connectDB = async () => {
       }
 
       // For serverless, don't buffer commands
-      mongoose.set('bufferCommands', false);
+      mongoose.set("bufferCommands", false);
     }
 
     await mongoose.connect(mongoURI, options);
@@ -307,9 +307,15 @@ process.on("SIGINT", async () => {
   }
 });
 
-// Start the server untuk development
-if (process.env.NODE_ENV !== "production") {
+// Start the server
+// For VPS: always start server
+// For Vercel: will be handled by serverless function
+if (require.main === module) {
+  // Script dijalankan langsung (not imported as module)
   startServer();
+} else {
+  // Imported as module (Vercel serverless)
+  console.log("📦 App exported as module for serverless");
 }
 
 // Export untuk Vercel serverless

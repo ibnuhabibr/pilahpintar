@@ -1,6 +1,7 @@
 # 🚀 Tutorial Deploy Backend PilahPintar ke Render.com
 
 ## 📋 Daftar Isi
+
 1. [Persiapan](#persiapan)
 2. [Sign Up & Setup Render](#sign-up--setup-render)
 3. [Deploy Backend](#deploy-backend)
@@ -14,12 +15,14 @@
 ## 1. Persiapan
 
 ### ✅ Prerequisites
+
 - [x] Repository GitHub: `pilahpintar` sudah ada
 - [x] Backend code sudah di-push ke GitHub branch `main`
 - [x] MongoDB Atlas cluster sudah berjalan
 - [x] File `render.yaml` sudah ada di folder `backend/`
 
 ### 📦 Yang Dibutuhkan
+
 - Account GitHub (untuk authentication)
 - Browser web
 - Connection string MongoDB Atlas
@@ -34,6 +37,7 @@
 1. **Buka browser** dan kunjungi: https://render.com
 
 2. **Sign Up dengan GitHub**:
+
    - Klik tombol **"Get Started for Free"**
    - Pilih **"Sign up with GitHub"**
    - Authorize Render untuk mengakses GitHub account Anda
@@ -73,27 +77,27 @@ Isi form konfigurasi dengan detail berikut:
 
 #### Basic Settings
 
-| Field | Value |
-|-------|-------|
-| **Name** | `pilahpintar-backend` |
-| **Region** | `Singapore` (closest to Indonesia) |
-| **Branch** | `main` |
-| **Root Directory** | `backend` |
-| **Runtime** | `Node` (auto-detected) |
+| Field              | Value                              |
+| ------------------ | ---------------------------------- |
+| **Name**           | `pilahpintar-backend`              |
+| **Region**         | `Singapore` (closest to Indonesia) |
+| **Branch**         | `main`                             |
+| **Root Directory** | `backend`                          |
+| **Runtime**        | `Node` (auto-detected)             |
 
 #### Build & Deploy Settings
 
-| Field | Value |
-|-------|-------|
+| Field             | Value         |
+| ----------------- | ------------- |
 | **Build Command** | `npm install` |
-| **Start Command** | `npm start` |
+| **Start Command** | `npm start`   |
 
 #### Instance Settings
 
-| Field | Value |
-|-------|-------|
-| **Instance Type** | `Free` |
-| **Auto-Deploy** | ✅ **Yes** (recommended) |
+| Field             | Value                    |
+| ----------------- | ------------------------ |
+| **Instance Type** | `Free`                   |
+| **Auto-Deploy**   | ✅ **Yes** (recommended) |
 
 > **Note**: Dengan Auto-Deploy enabled, setiap kali Anda push ke branch `main`, Render akan otomatis redeploy backend.
 
@@ -111,70 +115,85 @@ Isi form konfigurasi dengan detail berikut:
 Klik **"Add Environment Variable"** dan tambahkan satu per satu:
 
 #### 1. MONGODB_URI
+
 ```
 Key: MONGODB_URI
 Value: mongodb+srv://Vercel-Admin-PilahPintar:nv7xQsEDlAorZbf5@pilahpintar.ldoobvd.mongodb.net/pilahpintar?retryWrites=true&w=majority
 ```
 
 #### 2. JWT_SECRET
+
 ```
 Key: JWT_SECRET
 Value: pilahpintar-prod-aaca99bf7c4136fd0159f6b7c419e3e0434859746f9795656efda44d3797af81
 ```
 
 #### 3. JWT_EXPIRES_IN
+
 ```
 Key: JWT_EXPIRES_IN
 Value: 7d
 ```
 
 #### 4. NODE_ENV
+
 ```
 Key: NODE_ENV
 Value: production
 ```
 
 #### 5. FRONTEND_URL
+
 ```
 Key: FRONTEND_URL
 Value: https://frontend-gules-xi-70.vercel.app
 ```
+
 > **Note**: Ganti dengan URL frontend Anda yang sebenarnya
 
 #### 6. CORS_ORIGIN
+
 ```
 Key: CORS_ORIGIN
 Value: https://frontend-gules-xi-70.vercel.app
 ```
+
 > **Note**: Harus sama dengan FRONTEND_URL
 
 #### 7. MAX_FILE_SIZE
+
 ```
 Key: MAX_FILE_SIZE
 Value: 10485760
 ```
+
 > **Note**: 10MB in bytes
 
 #### 8. ALLOWED_FILE_TYPES
+
 ```
 Key: ALLOWED_FILE_TYPES
 Value: image/jpeg,image/png,image/jpg,image/webp
 ```
 
 #### 9. RATE_LIMIT_WINDOW_MS
+
 ```
 Key: RATE_LIMIT_WINDOW_MS
 Value: 900000
 ```
+
 > **Note**: 15 minutes in milliseconds
 
 #### 10. RATE_LIMIT_MAX_REQUESTS
+
 ```
 Key: RATE_LIMIT_MAX_REQUESTS
 Value: 100
 ```
 
 #### 11. PORT (Optional)
+
 ```
 Key: PORT
 Value: 3000
@@ -185,6 +204,7 @@ Value: 3000
 Pastikan semua 11 environment variables sudah ditambahkan dengan benar:
 
 ✅ **Checklist**:
+
 - [ ] MONGODB_URI
 - [ ] JWT_SECRET
 - [ ] JWT_EXPIRES_IN
@@ -220,6 +240,7 @@ Pastikan semua 11 environment variables sudah ditambahkan dengan benar:
 ⏰ **Estimated Time**: 3-5 menit
 
 Progress indicator akan menunjukkan:
+
 ```
 Building...
 ==> Downloading cache...
@@ -233,6 +254,7 @@ Deploying...
 ### Step 4: Get Backend URL
 
 Setelah deployment selesai, Anda akan mendapat URL seperti:
+
 ```
 https://pilahpintar-backend.onrender.com
 ```
@@ -248,16 +270,19 @@ https://pilahpintar-backend.onrender.com
 Buka browser atau gunakan curl untuk test health endpoint:
 
 **Via Browser**:
+
 ```
 https://pilahpintar-backend.onrender.com/api/health
 ```
 
 **Via PowerShell/Terminal**:
+
 ```powershell
 curl https://pilahpintar-backend.onrender.com/api/health
 ```
 
 **Expected Response**:
+
 ```json
 {
   "success": true,
@@ -273,6 +298,7 @@ curl https://pilahpintar-backend.onrender.com/api/health
 ### Test 2: Check Deployment Status
 
 Di Render Dashboard:
+
 1. Klik nama service **"pilahpintar-backend"**
 2. Lihat status indicator di atas:
    - ✅ **Green dot**: Service running
@@ -283,6 +309,7 @@ Di Render Dashboard:
 ### Test 3: MongoDB Connection
 
 Dari logs, cari line berikut:
+
 ```
 📦 MongoDB connected successfully
 🚀 PilahPintar API server running on port 3000
@@ -295,15 +322,18 @@ Dari logs, cari line berikut:
 ### Step 1: Update Frontend Environment Variables
 
 1. **Buka Vercel Dashboard** frontend project:
+
    ```
    https://vercel.com/your-username/frontend/settings/environment-variables
    ```
 
 2. **Edit atau Add** variable `REACT_APP_API_URL_PRODUCTION`:
+
    ```
    Key: REACT_APP_API_URL_PRODUCTION
    Value: https://pilahpintar-backend.onrender.com/api
    ```
+
    > **Note**: Tambahkan `/api` di akhir URL!
 
 3. **Save** environment variable
@@ -322,11 +352,13 @@ Setelah frontend redeploy selesai:
 1. **Buka frontend**: https://frontend-gules-xi-70.vercel.app
 
 2. **Test Upload Foto** (Smart Sort):
+
    - Kunjungi: `/smart-sort`
    - Upload foto sampah
    - ✅ Harus berhasil tanpa error "Network Error"
 
 3. **Test Google OAuth**:
+
    - Kunjungi: `/login`
    - Klik "Login dengan Google"
    - ✅ Harus redirect dan login berhasil
@@ -343,6 +375,7 @@ Setelah frontend redeploy selesai:
 ### ❌ Problem: Database Disconnected
 
 **Symptoms**:
+
 ```json
 {
   "database": "disconnected"
@@ -352,16 +385,19 @@ Setelah frontend redeploy selesai:
 **Solutions**:
 
 1. **Check Environment Variables**:
+
    - Pastikan `MONGODB_URI` ter-set dengan benar
    - Tidak ada typo atau spasi extra
    - Connection string lengkap dengan credentials
 
 2. **Check MongoDB Atlas Network Access**:
+
    - Login ke MongoDB Atlas
    - **Network Access** → Add `0.0.0.0/0` (allow all)
    - Atau add Render IP addresses
 
 3. **Check MongoDB Atlas Database Access**:
+
    - **Database Access** → User `Vercel-Admin-PilahPintar` ada
    - Password benar
    - User punya read/write access
@@ -372,6 +408,7 @@ Setelah frontend redeploy selesai:
 ### ❌ Problem: Build Failed
 
 **Symptoms**:
+
 ```
 Build failed with exit code 1
 ```
@@ -379,10 +416,12 @@ Build failed with exit code 1
 **Solutions**:
 
 1. **Check Build Logs**:
+
    - Baca error message di logs
    - Common issues: missing dependencies, syntax errors
 
 2. **Verify `package.json`**:
+
    ```json
    {
      "scripts": {
@@ -405,16 +444,19 @@ Build failed with exit code 1
 ### ❌ Problem: Service Keeps Restarting
 
 **Symptoms**:
+
 - Service shows "Live" then "Deploying" repeatedly
 - Logs show crash errors
 
 **Solutions**:
 
 1. **Check Application Logs**:
+
    - Look for error messages
    - Common: MongoDB connection timeout, missing env vars
 
 2. **Increase Health Check Timeout**:
+
    - Render Settings → **Health Check Path**: `/api/health`
    - Set timeout to 30 seconds
 
@@ -425,6 +467,7 @@ Build failed with exit code 1
 ### ❌ Problem: CORS Errors
 
 **Symptoms**:
+
 ```
 Access to fetch at ... has been blocked by CORS policy
 ```
@@ -432,20 +475,24 @@ Access to fetch at ... has been blocked by CORS policy
 **Solutions**:
 
 1. **Update CORS_ORIGIN**:
+
    - Pastikan CORS_ORIGIN sama dengan frontend URL
    - No trailing slash
 
 2. **Check app.js CORS config**:
    ```javascript
-   app.use(cors({
-     origin: process.env.CORS_ORIGIN,
-     credentials: true
-   }));
+   app.use(
+     cors({
+       origin: process.env.CORS_ORIGIN,
+       credentials: true,
+     })
+   );
    ```
 
 ### ❌ Problem: 404 Not Found
 
 **Symptoms**:
+
 ```
 Cannot GET /api/health
 ```
@@ -453,6 +500,7 @@ Cannot GET /api/health
 **Solutions**:
 
 1. **Check Root Directory**:
+
    - Pastikan Root Directory = `backend`
    - Bukan `./backend` atau `/backend`
 
@@ -478,17 +526,20 @@ Cannot GET /api/health
 Already enabled! Every push to `main` branch will trigger redeploy.
 
 To disable:
+
 1. **Settings** → **Build & Deploy**
 2. Toggle **"Auto-Deploy"** off
 
 ### Scaling (Paid Plans)
 
 Free tier limitations:
+
 - ❌ Service spins down after 15 minutes of inactivity
 - ❌ First request after spin down is slow (~30 seconds)
 - ✅ 750 hours/month free
 
 To keep service always on:
+
 1. Upgrade to **Starter Plan** ($7/month)
 2. Service stays running 24/7
 3. No cold starts
@@ -516,6 +567,7 @@ To keep service always on:
 ### Health Checks
 
 Render automatically monitors:
+
 - HTTP health check every 30 seconds
 - Auto-restart if service fails
 - Email notifications for failures
@@ -541,13 +593,13 @@ Backend code already backed up di GitHub!
 
 ### Essential URLs
 
-| Resource | URL |
-|----------|-----|
-| Render Dashboard | https://dashboard.render.com |
-| Backend Service | https://pilahpintar-backend.onrender.com |
-| Health Check | https://pilahpintar-backend.onrender.com/api/health |
-| MongoDB Atlas | https://cloud.mongodb.com |
-| GitHub Repo | https://github.com/ibnuhabibr/pilahpintar |
+| Resource         | URL                                                 |
+| ---------------- | --------------------------------------------------- |
+| Render Dashboard | https://dashboard.render.com                        |
+| Backend Service  | https://pilahpintar-backend.onrender.com            |
+| Health Check     | https://pilahpintar-backend.onrender.com/api/health |
+| MongoDB Atlas    | https://cloud.mongodb.com                           |
+| GitHub Repo      | https://github.com/ibnuhabibr/pilahpintar           |
 
 ### Essential Commands
 
@@ -582,6 +634,7 @@ PORT=3000
 ## 🎉 Selesai!
 
 Backend PilahPintar sekarang sudah running di Render.com dengan:
+
 - ✅ Persistent MongoDB connection
 - ✅ Auto-deploy from GitHub
 - ✅ Free SSL certificate
@@ -596,6 +649,7 @@ Backend PilahPintar sekarang sudah running di Render.com dengan:
 ## 📞 Support
 
 Jika ada masalah:
+
 1. Check logs di Render Dashboard
 2. Check MongoDB Atlas network access
 3. Verify environment variables
@@ -604,10 +658,10 @@ Jika ada masalah:
 
 ---
 
-**Tutorial ini dibuat untuk**: PilahPintar Backend Deployment  
-**Platform**: Render.com  
-**Date**: October 2025  
-**Version**: 1.0  
+**Tutorial ini dibuat untuk**: PilahPintar Backend Deployment
+**Platform**: Render.com
+**Date**: October 2025
+**Version**: 1.0
 
 ---
 
