@@ -185,13 +185,29 @@ const connectDB = async () => {
     const mongoURI =
       process.env.MONGODB_URI || "mongodb://localhost:27017/pilahpintar";
 
-    // Connection options
+    // Connection options optimized for Vercel serverless
     const options = {
       serverSelectionTimeoutMS: 10000, // 10 seconds
       heartbeatFrequencyMS: 5000, // 5 seconds
-      maxPoolSize: 10,
+      maxPoolSize: process.env.NODE_ENV === "production" ? 5 : 10, // Smaller pool for serverless
+      minPoolSize: process.env.NODE_ENV === "production" ? 1 : 0,
+      maxIdleTimeMS: 60000, // Close idle connections after 60s
       bufferCommands: false,
+      connectTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
     };
+
+    // Use cached connection in serverless environment
+    if (process.env.NODE_ENV === "production") {
+      // Check if connection already exists
+      if (mongoose.connection.readyState === 1) {
+        console.log("📦 Using existing MongoDB connection");
+        return;
+      }
+
+      // For serverless, don't buffer commands
+      mongoose.set('bufferCommands', false);
+    }
 
     await mongoose.connect(mongoURI, options);
     console.log("📦 MongoDB connected successfully");
@@ -210,9 +226,11 @@ const connectDB = async () => {
     });
   } catch (error) {
     console.error("❌ MongoDB connection error:", error.message);
+    console.error("Error details:", error);
     // In development, we'll continue without database
     if (process.env.NODE_ENV === "production") {
-      process.exit(1);
+      // Don't exit in serverless, just log the error
+      console.error("⚠️  Running without database connection");
     } else {
       console.log("⚠️  Continuing in development mode without database");
     }

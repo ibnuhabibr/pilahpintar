@@ -11,5 +11,14 @@
       "src": "/(.*)",
       "dest": "src/app.js"
     }
-  ]
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_uri"
+  },
+  "functions": {
+    "src/app.js": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  }
 }
