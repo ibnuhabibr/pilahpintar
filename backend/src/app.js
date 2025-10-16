@@ -29,13 +29,9 @@ process.on("uncaughtException", (error) => {
 
 const app = express();
 
-// Trust proxy - IMPORTANT for Nginx reverse proxy
+// Trust proxy - CRITICAL for Nginx reverse proxy and rate limiting
+// This MUST be set before any middleware that uses IP address
 app.set("trust proxy", 1);
-
-// Trust proxy for development (needed for rate limiting)
-if (process.env.NODE_ENV === "development") {
-  app.set("trust proxy", 1);
-}
 
 // Security middleware
 app.use(
@@ -44,13 +40,15 @@ app.use(
   })
 );
 
-// Rate limiting
+// Rate limiting (configured AFTER trust proxy)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes default
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // 100 requests per window
   message: {
     error: "Too many requests from this IP, please try again later.",
   },
+  standardHeaders: true, // Return rate limit info in headers
+  legacyHeaders: false, // Disable X-RateLimit-* headers
 });
 
 app.use(limiter);
