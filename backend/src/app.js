@@ -29,6 +29,9 @@ process.on("uncaughtException", (error) => {
 
 const app = express();
 
+// Trust proxy - IMPORTANT for Nginx reverse proxy
+app.set("trust proxy", 1);
+
 // Trust proxy for development (needed for rate limiting)
 if (process.env.NODE_ENV === "development") {
   app.set("trust proxy", 1);
