@@ -17,6 +17,13 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.vps
+backend/.env.vps
+
+# Documentation with secrets (DO NOT COMMIT)
+ENV_SETUP_SUMMARY.md
+ENV_VERIFICATION_CHECKLIST.md
+VERCEL_ENVIRONMENT_VARIABLES.md
 
 # IDE files
 .vscode/

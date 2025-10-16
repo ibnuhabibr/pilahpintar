@@ -656,7 +656,7 @@ chmod +x deploy.sh
 ### Step 7.3: Test Deploy Script
 
 ```bash
-./deploy.sh
+./deploy.sh //SAMPE SINI STEP TERAKHIR
 ```
 
 ### Step 7.4: One-Line Deploy Command (Optional)

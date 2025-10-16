@@ -59,6 +59,8 @@ const allowedOrigins = [
   "http://localhost:3001",
   "https://pilahpintar.site",
   "https://www.pilahpintar.site",
+  "https://api.pilahpintar.site",
+  "https://frontend-gules-xi-70.vercel.app", // Vercel deployment
   "https://pilahpintar.vercel.app",
   "https://pilahpintar-beige.vercel.app",
   "https://pilahpintar-frontend.vercel.app",
@@ -142,7 +144,7 @@ const educationRoutes = require("./routes/education");
 const communityRoutes = require("./routes/community");
 const uploadRoutes = require("./routes/upload");
 
-// Use routes
+// Use routes with /api prefix (for path-based routing)
 app.use("/api/auth", authRoutes);
 app.use("/api/classification", classificationRoutes);
 app.use("/api/user", userRoutes);
@@ -150,6 +152,15 @@ app.use("/api/waste-map", wasteMapRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/upload", uploadRoutes);
+
+// Also support root routes (for subdomain api.pilahpintar.site)
+app.use("/auth", authRoutes);
+app.use("/classification", classificationRoutes);
+app.use("/user", userRoutes);
+app.use("/waste-map", wasteMapRoutes);
+app.use("/education", educationRoutes);
+app.use("/community", communityRoutes);
+app.use("/upload", uploadRoutes);
 
 // Root route handler
 app.get("/", (req, res) => {
