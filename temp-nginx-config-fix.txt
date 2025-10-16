@@ -1,0 +1,24 @@
+# Jalankan commands ini di VPS via SSH:
+
+# 1. Backup config
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup2
+
+# 2. Edit Nginx config
+sudo nano /etc/nginx/sites-available/default
+
+# 3. UPDATE server_name line (line 3):
+# DARI:
+#     server_name api.pilahpintar.site;
+# JADI:
+#     server_name api.pilahpintar.site 202.10.41.181;
+
+# 4. Test config
+sudo nginx -t
+
+# 5. Reload Nginx
+sudo systemctl reload nginx
+
+# 6. Test dengan IP
+curl http://202.10.41.181/health
+
+# Expected: {"success":true,"database":"connected"}

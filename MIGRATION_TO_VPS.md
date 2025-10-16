@@ -54,15 +54,15 @@ vercel --prod
 
 ### Backend VPS Endpoints
 
-| Endpoint                                      | Method | Purpose                        | Auth Required |
-| --------------------------------------------- | ------ | ------------------------------ | ------------- |
-| `https://api.pilahpintar.site/health`         | GET    | Health check & status          | No            |
-| `https://api.pilahpintar.site/upload/classify`| POST   | Upload & classify waste image  | Yes           |
-| `https://api.pilahpintar.site/auth/login`     | POST   | User login                     | No            |
-| `https://api.pilahpintar.site/auth/register`  | POST   | User registration              | No            |
-| `https://api.pilahpintar.site/auth/google`    | GET    | Google OAuth                   | No            |
-| `https://api.pilahpintar.site/leaderboard`    | GET    | User leaderboard               | No            |
-| `https://api.pilahpintar.site/analytics`      | GET    | Waste analytics                | No            |
+| Endpoint                                       | Method | Purpose                       | Auth Required |
+| ---------------------------------------------- | ------ | ----------------------------- | ------------- |
+| `https://api.pilahpintar.site/health`          | GET    | Health check & status         | No            |
+| `https://api.pilahpintar.site/upload/classify` | POST   | Upload & classify waste image | Yes           |
+| `https://api.pilahpintar.site/auth/login`      | POST   | User login                    | No            |
+| `https://api.pilahpintar.site/auth/register`   | POST   | User registration             | No            |
+| `https://api.pilahpintar.site/auth/google`     | GET    | Google OAuth                  | No            |
+| `https://api.pilahpintar.site/leaderboard`     | GET    | User leaderboard              | No            |
+| `https://api.pilahpintar.site/analytics`       | GET    | Waste analytics               | No            |
 
 ### Upload/Classify Endpoint Details
 

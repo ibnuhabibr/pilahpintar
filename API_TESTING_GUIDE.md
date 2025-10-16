@@ -13,6 +13,7 @@ curl https://api.pilahpintar.site/health
 ```
 
 **Expected:**
+
 ```json
 {
   "success": true,
@@ -34,6 +35,7 @@ curl -H "Origin: https://pilahpintar.site" \
 ```
 
 **Expected headers:**
+
 ```
 < Access-Control-Allow-Origin: https://pilahpintar.site
 < Access-Control-Allow-Credentials: true
@@ -52,6 +54,7 @@ curl -X POST https://api.pilahpintar.site/upload/classify \
 ```
 
 **Expected (401 Unauthorized):**
+
 ```json
 {
   "success": false,
@@ -73,7 +76,7 @@ https://frontend-gules-xi-70.vercel.app
 
 ### Step 2: Open DevTools
 
-**Windows/Linux:** `F12` atau `Ctrl + Shift + I`  
+**Windows/Linux:** `F12` atau `Ctrl + Shift + I`
 **Mac:** `Cmd + Option + I`
 
 ### Step 3: Network Tab Inspection
@@ -84,6 +87,7 @@ https://frontend-gules-xi-70.vercel.app
 4. Refresh page (F5)
 
 **Expected requests:**
+
 ```
 Name: health
 URL: https://api.pilahpintar.site/health
@@ -98,31 +102,37 @@ Open **Console** tab, paste and run:
 
 ```javascript
 // Test 1: Check API URL configuration
-console.log('API Base URL:', process.env.REACT_APP_API_URL);
+console.log("API Base URL:", process.env.REACT_APP_API_URL);
 
 // Test 2: Manual fetch health endpoint
-fetch('https://api.pilahpintar.site/health')
-  .then(res => res.json())
-  .then(data => console.log('✅ Backend Response:', data))
-  .catch(err => console.error('❌ Error:', err));
+fetch("https://api.pilahpintar.site/health")
+  .then((res) => res.json())
+  .then((data) => console.log("✅ Backend Response:", data))
+  .catch((err) => console.error("❌ Error:", err));
 
 // Test 3: Check CORS
-fetch('https://api.pilahpintar.site/health', {
-  method: 'GET',
-  credentials: 'include',
+fetch("https://api.pilahpintar.site/health", {
+  method: "GET",
+  credentials: "include",
   headers: {
-    'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 })
-  .then(res => {
-    console.log('CORS Check:');
-    console.log('  Status:', res.status);
-    console.log('  Allow-Origin:', res.headers.get('Access-Control-Allow-Origin'));
-    console.log('  Allow-Credentials:', res.headers.get('Access-Control-Allow-Credentials'));
+  .then((res) => {
+    console.log("CORS Check:");
+    console.log("  Status:", res.status);
+    console.log(
+      "  Allow-Origin:",
+      res.headers.get("Access-Control-Allow-Origin")
+    );
+    console.log(
+      "  Allow-Credentials:",
+      res.headers.get("Access-Control-Allow-Credentials")
+    );
     return res.json();
   })
-  .then(data => console.log('  Data:', data))
-  .catch(err => console.error('❌ CORS Error:', err));
+  .then((data) => console.log("  Data:", data))
+  .catch((err) => console.error("❌ CORS Error:", err));
 ```
 
 ---
@@ -145,7 +155,7 @@ Request:
   Method: POST
   Status: 200
   Content-Type: multipart/form-data
-  
+
 Response:
   {
     "success": true,
@@ -178,6 +188,7 @@ curl -X POST https://api.pilahpintar.site/upload/classify \
 ```
 
 **Response Check:**
+
 - Status: `200 OK`
 - Response body contains `classification` object
 - Classification `type` is one of: organic, plastic, paper, glass, metal
@@ -199,6 +210,7 @@ curl -X POST https://api.pilahpintar.site/auth/login \
 ```
 
 **Expected (if user exists):**
+
 ```json
 {
   "success": true,
@@ -224,6 +236,7 @@ curl -X GET https://api.pilahpintar.site/user/profile \
 ```
 
 **Expected:**
+
 ```json
 {
   "success": true,
@@ -315,6 +328,7 @@ echo "✅ Test completed!"
 ```
 
 **Run:**
+
 ```bash
 chmod +x test-api.sh
 ./test-api.sh
@@ -329,6 +343,7 @@ chmod +x test-api.sh
 **Cause:** Backend not running or not accessible
 
 **Check:**
+
 ```bash
 # SSH to VPS
 ssh pilahpintar@202.10.41.181
@@ -348,6 +363,7 @@ pm2 restart pilahpintar-backend
 **Cause:** Frontend origin not in allowedOrigins
 
 **Check:**
+
 ```bash
 # Check CORS config
 cat ~/pilahpintar/backend/src/app.js | grep -A 10 "allowedOrigins"
@@ -362,6 +378,7 @@ pm2 restart pilahpintar-backend
 **Cause:** Endpoint path mismatch
 
 **Check:**
+
 ```bash
 # Test both with and without /api prefix
 curl https://api.pilahpintar.site/health
@@ -375,6 +392,7 @@ curl https://api.pilahpintar.site/api/health
 **Cause:** Nginx can't reach backend
 
 **Check:**
+
 ```bash
 # Check Nginx config
 sudo nginx -t
@@ -392,6 +410,7 @@ pm2 logs pilahpintar-backend
 **Cause:** Certificate not installed or expired
 
 **Check:**
+
 ```bash
 # Check certificate
 sudo certbot certificates
