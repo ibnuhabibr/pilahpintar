@@ -19,10 +19,32 @@ const ResetPassword = () => {
         console.log("Hash:", window.location.hash);
         console.log("Search:", location.search);
 
-        // Check both hash and search params for tokens
+        // Check for error in hash first
         const hashParams = new URLSearchParams(
           window.location.hash.substring(1)
         );
+
+        const error = hashParams.get("error");
+        const errorCode = hashParams.get("error_code");
+        const errorDescription = hashParams.get("error_description");
+
+        if (error) {
+          console.error("Supabase error in URL:", { error, errorCode, errorDescription });
+
+          if (errorCode === "otp_expired") {
+            toast.error("Link reset password sudah kadaluarsa. Silakan request link baru.");
+          } else {
+            toast.error("Link reset password tidak valid. Silakan request link baru.");
+          }
+
+          // Wait 2 seconds then redirect
+          setTimeout(() => {
+            navigate("/forgot-password");
+          }, 2000);
+          return;
+        }
+
+        // Check for valid tokens
         const searchParams = new URLSearchParams(location.search);
 
         const accessToken =
@@ -40,7 +62,7 @@ const ResetPassword = () => {
             // Set the session with the recovery tokens
             const { data, error } = await supabase.auth.setSession({
               access_token: accessToken,
-              refresh_token: refreshToken || accessToken, // Fallback if no refresh token
+              refresh_token: refreshToken || accessToken,
             });
 
             if (error) {
@@ -62,8 +84,12 @@ const ResetPassword = () => {
         }
       } catch (error) {
         console.error("Password reset validation error:", error);
-        toast.error("Link reset password tidak valid atau sudah kadaluarsa");
-        navigate("/login");
+        toast.error("Link reset password tidak valid atau sudah kadaluarsa. Silakan request link baru.");
+
+        // Wait 2 seconds then redirect
+        setTimeout(() => {
+          navigate("/forgot-password");
+        }, 2000);
       }
     };
 
