@@ -29,12 +29,20 @@ const ResetPassword = () => {
         const errorDescription = hashParams.get("error_description");
 
         if (error) {
-          console.error("Supabase error in URL:", { error, errorCode, errorDescription });
+          console.error("Supabase error in URL:", {
+            error,
+            errorCode,
+            errorDescription,
+          });
 
           if (errorCode === "otp_expired") {
-            toast.error("Link reset password sudah kadaluarsa. Silakan request link baru.");
+            toast.error(
+              "Link reset password sudah kadaluarsa. Silakan request link baru."
+            );
           } else {
-            toast.error("Link reset password tidak valid. Silakan request link baru.");
+            toast.error(
+              "Link reset password tidak valid. Silakan request link baru."
+            );
           }
 
           // Wait 2 seconds then redirect
@@ -84,7 +92,9 @@ const ResetPassword = () => {
         }
       } catch (error) {
         console.error("Password reset validation error:", error);
-        toast.error("Link reset password tidak valid atau sudah kadaluarsa. Silakan request link baru.");
+        toast.error(
+          "Link reset password tidak valid atau sudah kadaluarsa. Silakan request link baru."
+        );
 
         // Wait 2 seconds then redirect
         setTimeout(() => {

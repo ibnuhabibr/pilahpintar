@@ -3,6 +3,7 @@
 ## 🎯 Status Backend
 
 ✅ **Backend VPS FULLY WORKING:**
+
 - Health: `https://api.pilahpintar.site/health` → 200 OK
 - OAuth: `https://api.pilahpintar.site/auth/oauth` → 200 OK
 - Upload: `https://api.pilahpintar.site/upload/classify` → Ready
@@ -49,6 +50,7 @@ New Value (VPS backend):
 ```
 
 4. **Select environments:**
+
    - ✅ Production
    - ✅ Preview
    - ✅ Development
@@ -121,6 +123,7 @@ REACT_APP_GOOGLE_CLIENT_ID = (existing value - don't change)
 6. **Wait:** ~2-5 minutes for build complete
 
 **You'll see:**
+
 - ⏳ Building... (yellow)
 - ✅ Ready (green checkmark) - Done!
 
@@ -157,6 +160,7 @@ git push origin main
 **Time:** Usually 2-3 minutes
 
 **Deployment URL:**
+
 - Production: `https://pilahpintar.site`
 - Also available: `https://www.pilahpintar.site`
 - Vercel URL: `https://frontend-gules-xi-70.vercel.app`
@@ -168,12 +172,14 @@ git push origin main
 **Before testing, clear cache:**
 
 **Chrome/Edge:**
+
 1. Press `Ctrl + Shift + Delete`
 2. Select: `Cached images and files`
 3. Time range: `All time`
 4. Click: `Clear data`
 
 **Or Hard Refresh:**
+
 - Windows: `Ctrl + Shift + R` atau `Ctrl + F5`
 - Mac: `Cmd + Shift + R`
 
@@ -188,7 +194,7 @@ git push origin main
 3. **Console tab**, run:
 
 ```javascript
-console.log('API URL:', process.env.REACT_APP_API_URL);
+console.log("API URL:", process.env.REACT_APP_API_URL);
 // Expected output: https://api.pilahpintar.site
 ```
 
@@ -201,10 +207,10 @@ console.log('API URL:', process.env.REACT_APP_API_URL);
 **In Console, run:**
 
 ```javascript
-fetch('https://api.pilahpintar.site/health')
-  .then(r => r.json())
-  .then(d => console.log('✅ Backend Health:', d))
-  .catch(e => console.error('❌ Error:', e));
+fetch("https://api.pilahpintar.site/health")
+  .then((r) => r.json())
+  .then((d) => console.log("✅ Backend Health:", d))
+  .catch((e) => console.error("❌ Error:", e));
 ```
 
 **Expected output:**
@@ -274,6 +280,7 @@ Response: {success: true, data: {classification: {...}}}
 ### Issue: "API URL still shows old value"
 
 **Solution:**
+
 1. Hard refresh: `Ctrl + Shift + R`
 2. Clear all browser data
 3. Close and reopen browser
@@ -286,21 +293,21 @@ Response: {success: true, data: {classification: {...}}}
 **Check CORS headers:**
 
 ```javascript
-fetch('https://api.pilahpintar.site/health', {
-  method: 'OPTIONS',
+fetch("https://api.pilahpintar.site/health", {
+  method: "OPTIONS",
   headers: {
-    'Origin': 'https://pilahpintar.site',
-    'Access-Control-Request-Method': 'POST'
-  }
-})
-.then(r => {
-  console.log('CORS headers:', r.headers.get('Access-Control-Allow-Origin'));
+    Origin: "https://pilahpintar.site",
+    "Access-Control-Request-Method": "POST",
+  },
+}).then((r) => {
+  console.log("CORS headers:", r.headers.get("Access-Control-Allow-Origin"));
 });
 ```
 
 **Expected:** `Access-Control-Allow-Origin: https://pilahpintar.site`
 
 **If not working:**
+
 ```bash
 # SSH to VPS
 ssh pilahpintar@202.10.41.181
@@ -326,6 +333,7 @@ pm2 restart pilahpintar-backend
 **Cause:** Frontend trying to access `http://api.pilahpintar.site` (not HTTPS)
 
 **Solution:**
+
 - Verify `REACT_APP_API_URL` starts with `https://` (not `http://`)
 - Redeploy frontend
 - Clear browser cache
@@ -347,6 +355,7 @@ Backend response: {success: true, ...}
 ```
 
 **If error:**
+
 1. Check Network tab → `auth/oauth` request
 2. Status code (should be 200)
 3. Response body
@@ -373,6 +382,7 @@ After completing all steps, verify:
 ## 🎯 EXPECTED FINAL STATE
 
 **Frontend (Vercel):**
+
 ```
 https://pilahpintar.site → ✅ Working
 https://www.pilahpintar.site → ✅ Working
@@ -380,6 +390,7 @@ https://frontend-gules-xi-70.vercel.app → ✅ Working
 ```
 
 **Backend (VPS):**
+
 ```
 https://api.pilahpintar.site/health → ✅ 200 OK
 https://api.pilahpintar.site/auth/oauth → ✅ 200 OK
@@ -387,6 +398,7 @@ https://api.pilahpintar.site/upload/classify → ✅ 200 OK
 ```
 
 **Features:**
+
 ```
 ✅ Google OAuth login
 ✅ Email login
@@ -431,6 +443,7 @@ curl -Method POST -Uri "https://api.pilahpintar.site/auth/oauth" -ContentType "a
 ## 🎉 NEXT STEPS AFTER SUCCESSFUL DEPLOY
 
 1. **Monitor PM2 logs:**
+
    ```bash
    ssh pilahpintar@202.10.41.181
    pm2 logs pilahpintar-backend --lines 50
@@ -439,6 +452,7 @@ curl -Method POST -Uri "https://api.pilahpintar.site/auth/oauth" -ContentType "a
 2. **Setup password reset** (follow `FIX_OAUTH_PASSWORD_RESET.md`)
 
 3. **Test all features:**
+
    - User registration
    - Google OAuth
    - Email login
@@ -458,6 +472,7 @@ curl -Method POST -Uri "https://api.pilahpintar.site/auth/oauth" -ContentType "a
 **🚀 Mulai update Vercel environment variables sekarang!**
 
 **Estimasi waktu:** 5-10 menit total
+
 - Update env vars: 2 min
 - Redeploy: 3 min
 - Testing: 5 min

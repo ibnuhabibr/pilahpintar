@@ -2,8 +2,8 @@
 
 ## 🎯 Status Update
 
-✅ **Upload gambar** - BERHASIL!  
-⚠️ **Google OAuth** - Stuck di callback URL  
+✅ **Upload gambar** - BERHASIL!
+⚠️ **Google OAuth** - Stuck di callback URL
 ❌ **Password Reset** - Token selalu kadaluarsa
 
 ---
@@ -11,6 +11,7 @@
 ## 🔍 Problem 1: Google OAuth Stuck
 
 ### **Symptoms:**
+
 - URL stuck di: `https://www.pilahpintar.site/auth/callback#access_token=...`
 - Spinner terus berputar "Memproses login..."
 - Console error di browser DevTools
@@ -20,9 +21,10 @@
 Ada 2 kemungkinan:
 
 1. **Frontend tidak bisa hubungi backend OAuth endpoint**
+
    - URL backend salah (masih ke Vercel lama?)
    - CORS issue
-   
+
 2. **Supabase session tidak ter-parse dengan benar**
    - Token di URL hash (`#access_token=...`) tidak di-extract
    - `supabase.auth.getSession()` return null
@@ -60,6 +62,7 @@ Check environment variable Vercel:
 4. Check `REACT_APP_API_URL`
 
 **Expected value:**
+
 ```
 https://api.pilahpintar.site
 ```
@@ -88,6 +91,7 @@ curl -X POST http://localhost:3000/auth/oauth \
 ```
 
 **Expected response:**
+
 ```json
 {
   "success": true,
@@ -120,6 +124,7 @@ cat ~/pilahpintar/backend/src/app.js | grep -A 10 "allowedOrigins"
 ```
 
 **Should include:**
+
 ```javascript
 const allowedOrigins = [
   "https://pilahpintar.site",
@@ -136,7 +141,7 @@ const allowedOrigins = [
 Supabase perlu tahu kemana redirect setelah OAuth:
 
 1. **Login:** https://supabase.com/dashboard
-2. **Select project:** pilahpintar  
+2. **Select project:** pilahpintar
 3. **Authentication → URL Configuration**
 
 **Add these redirect URLs:**
@@ -148,6 +153,7 @@ https://frontend-gules-xi-70.vercel.app/auth/callback
 ```
 
 **Site URL:**
+
 ```
 https://pilahpintar.site
 ```
@@ -174,14 +180,14 @@ useEffect(() => {
 
       // Try getting session from Supabase
       let { data, error } = await supabase.auth.getSession();
-      
+
       // Fallback: parse hash manually if no session
       if (!data?.session && window.location.hash) {
         console.log("No session, trying to set session from URL...");
-        
+
         // Supabase will automatically handle hash params
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // Try again after delay
         const result = await supabase.auth.getSession();
         data = result.data;
@@ -215,6 +221,7 @@ useEffect(() => {
 ## 🔐 Problem 2: Password Reset Token Kadaluarsa
 
 ### **Symptoms:**
+
 - User request password reset
 - Email diterima
 - Click link → "Token sudah kadaluarsa"
@@ -224,6 +231,7 @@ useEffect(() => {
 Password reset endpoint **BELUM DIIMPLEMENTASI** di backend!
 
 File `backend/src/routes/auth.js` tidak ada endpoint:
+
 - `POST /auth/forgot-password` - Request reset
 - `POST /auth/reset-password` - Reset dengan token
 
@@ -291,7 +299,7 @@ router.post(
 
       // Send email (if Brevo configured)
       const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
-      
+
       // TODO: Implement email sending with Brevo
       // For now, return token in response (DEV ONLY)
       console.log("Reset URL:", resetUrl);
@@ -318,10 +326,7 @@ router.post(
 router.post(
   "/reset-password",
   [
-    body("token")
-      .trim()
-      .isLength({ min: 1 })
-      .withMessage("Token is required"),
+    body("token").trim().isLength({ min: 1 }).withMessage("Token is required"),
     body("newPassword")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
@@ -406,7 +411,7 @@ nano src/models/User.js
 const userSchema = new mongoose.Schema(
   {
     // ... existing fields ...
-    
+
     // Password reset
     resetPasswordToken: {
       type: String,
@@ -466,6 +471,7 @@ curl -X POST http://localhost:3000/auth/reset-password \
 ## ✅ Quick Fixes Checklist
 
 ### For Google OAuth:
+
 - [ ] Check browser console for errors
 - [ ] Verify `REACT_APP_API_URL` in Vercel = `https://api.pilahpintar.site`
 - [ ] Test backend `/auth/oauth` endpoint works
@@ -473,6 +479,7 @@ curl -X POST http://localhost:3000/auth/reset-password \
 - [ ] Redeploy frontend if env vars changed
 
 ### For Password Reset:
+
 - [ ] Add forgot-password endpoint to `auth.js`
 - [ ] Add reset-password endpoint to `auth.js`
 - [ ] Update User model with reset fields
@@ -503,6 +510,7 @@ curl -H "Origin: https://pilahpintar.site" \
 ---
 
 **Tolong share:**
+
 1. **Browser console output** dari `/auth/callback` page
 2. **Error message** yang muncul (screenshot atau copy text)
 3. **Vercel env vars** - apa value `REACT_APP_API_URL`?

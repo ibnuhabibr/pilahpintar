@@ -33,10 +33,10 @@ HEALTH=$(curl -s http://localhost:3000/health)
 if echo "$HEALTH" | grep -q '"success":true'; then
     echo "✅ Deployment successful!"
     echo "Response: $HEALTH"
-    
+
     # Show PM2 status
     pm2 status pilahpintar-backend
-    
+
     # Show recent logs
     echo ""
     echo "📋 Recent logs:"
@@ -44,14 +44,14 @@ if echo "$HEALTH" | grep -q '"success":true'; then
 else
     echo "❌ Deployment failed! Backend not responding correctly."
     echo "Response: $HEALTH"
-    
+
     # Rollback to backup
     echo "⚠️  Rolling back to previous version..."
     LATEST_BACKUP=$(ls -td ~/pilahpintar/backend-backup-* | head -1)
     rm -rf ~/pilahpintar/backend
     cp -r "$LATEST_BACKUP" ~/pilahpintar/backend
     pm2 restart pilahpintar-backend
-    
+
     exit 1
 fi
 
