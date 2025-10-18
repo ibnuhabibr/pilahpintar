@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const { auth } = require("../middleware/auth");
@@ -385,5 +386,193 @@ router.post(
     }
   }
 );
+
+// ============================================
+// FORGOT PASSWORD - Send Reset Email
+// ============================================
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      // Don't reveal if user exists (security)
+      return res.status(200).json({
+        success: true,
+        message: "If account exists, reset email will be sent",
+      });
+    }
+
+    // Generate 6-digit reset code
+    const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    // Save to database (expires in 1 hour)
+    user.resetPasswordToken = resetTokenHash;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    console.log("Password reset requested for:", user.email);
+    console.log("Reset code:", resetToken);
+
+    // Send email via Brevo
+    const brevo = require("@getbrevo/brevo");
+    const apiInstance = new brevo.TransactionalEmailsApi();
+    apiInstance.setApiKey(
+      brevo.TransactionalEmailsApiApiKeys.apiKey,
+      process.env.BREVO_API_KEY
+    );
+
+    const sendSmtpEmail = new brevo.SendSmtpEmail();
+    sendSmtpEmail.subject = "Reset Password - PilahPintar";
+    sendSmtpEmail.to = [{ email: user.email, name: user.name }];
+    sendSmtpEmail.sender = {
+      name: "PilahPintar",
+      email: "noreply@pilahpintar.site",
+    };
+    sendSmtpEmail.htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #10B981; margin: 0;">🔒 Reset Password</h1>
+        </div>
+
+        <div style="background-color: #f9fafb; padding: 25px; border-radius: 10px; border-left: 4px solid #10B981;">
+          <p style="font-size: 16px; color: #374151; margin-top: 0;">Halo <strong>${user.name}</strong>,</p>
+
+          <p style="font-size: 14px; color: #6b7280; line-height: 1.6;">
+            Anda meminta untuk reset password akun PilahPintar. Gunakan kode berikut:
+          </p>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <h1 style="color: #10B981; font-size: 36px; letter-spacing: 8px; margin: 0; font-family: monospace;">
+              ${resetToken}
+            </h1>
+          </div>
+
+          <p style="font-size: 13px; color: #9ca3af;">
+            Atau klik link berikut untuk reset password:
+          </p>
+          <div style="text-align: center; margin: 20px 0;">
+            <a href="${process.env.FRONTEND_URL}/reset-password?token=${resetToken}"
+               style="display: inline-block; padding: 12px 30px; background-color: #10B981; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+              Reset Password
+            </a>
+          </div>
+        </div>
+
+        <div style="margin-top: 25px; padding: 15px; background-color: #fef2f2; border-radius: 8px; border-left: 4px solid #ef4444;">
+          <p style="font-size: 13px; color: #991b1b; margin: 0; font-weight: 600;">
+            ⏰ Kode ini akan kadaluarsa dalam 1 jam.
+          </p>
+          <p style="font-size: 12px; color: #991b1b; margin: 8px 0 0 0;">
+            Jika Anda tidak meminta reset password, abaikan email ini.
+          </p>
+        </div>
+
+        <hr style="margin: 25px 0; border: none; border-top: 1px solid #e5e7eb;">
+
+        <div style="text-align: center;">
+          <p style="font-size: 12px; color: #9ca3af; margin: 0;">
+            Email dari PilahPintar - Memilah Sampah dengan Cerdas 🌱
+          </p>
+        </div>
+      </div>
+    `;
+
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+    console.log("Reset email sent successfully to:", user.email);
+
+    res.json({
+      success: true,
+      message: "Reset code sent to your email",
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to send reset email",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+});
+
+// ============================================
+// RESET PASSWORD - Update with Token
+// ============================================
+router.post("/reset-password", async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Token and new password are required",
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 8 characters long",
+      });
+    }
+
+    // Hash the token to compare with database
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
+    // Find user with valid token
+    const user = await User.findOne({
+      resetPasswordToken: resetTokenHash,
+      resetPasswordExpires: { $gt: Date.now() }, // Token not expired
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired reset token",
+      });
+    }
+
+    console.log("Resetting password for user:", user.email);
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    // Clear reset token fields
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    console.log("Password reset successful for:", user.email);
+
+    res.json({
+      success: true,
+      message: "Password has been reset successfully. You can now login with your new password.",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to reset password",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+});
 
 module.exports = router;
